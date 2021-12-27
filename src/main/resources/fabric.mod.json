@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "megaparrot",
+  "version": "${version}",
+  "name": "Megaparrot",
+  "description": "Adds super-sized, rideable, parrots!",
+  "authors": [
+    "SkylorBeck"
+  ],
+  "contact": {
+    "website": "www.skylorbeck.website"
+  },
+  "license": "LGPL-3.0",
+  "icon": "assets/megaparrot/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "website.skylorbeck.minecraft.megaparrot.client.MegaparrotClient"
+    ],
+    "main": [
+      "website.skylorbeck.minecraft.megaparrot.Megaparrot"
+    ]
+  },
+  "mixins": [
+    "megaparrot.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.12.12",
+    "fabric": "*",
+    "minecraft": "1.18.1"
+  }
+}
