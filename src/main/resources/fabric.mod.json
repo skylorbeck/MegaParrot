@@ -5,10 +5,15 @@
   "name": "Megaparrot",
   "description": "Adds super-sized, rideable, parrots!",
   "authors": [
-    "SkylorBeck"
+    "Author: SkylorBeck",
+    "Patrons:",
+    "Ch'one No akumus"
   ],
   "contact": {
-    "website": "www.skylorbeck.website"
+    "homepage": "https://www.skylorbeck.website",
+    "source": "https://github.com/Skylortrexler/MegaParrot",
+    "repo": "https://github.com/Skylortrexler/MegaParrot",
+    "issues": "https://github.com/Skylortrexler/MegaParrot/issues"
   },
   "license": "LGPL-3.0",
   "icon": "assets/megaparrot/icon.png",
