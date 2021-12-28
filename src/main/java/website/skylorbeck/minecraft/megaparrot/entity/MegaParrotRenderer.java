@@ -26,7 +26,7 @@ public class MegaParrotRenderer extends GeoEntityRenderer<MegaParrotEntity>
     @Override
     public void render(MegaParrotEntity entity, float entityYaw, float partialTicks, MatrixStack stack, VertexConsumerProvider bufferIn, int packedLightIn) {
         super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
-        Entity holdingEntity = ((MobEntity)entity).getHoldingEntity();
+        Entity holdingEntity = entity.getHoldingEntity();
         if (holdingEntity == null) {
             return;
         }
@@ -37,29 +37,28 @@ public class MegaParrotRenderer extends GeoEntityRenderer<MegaParrotEntity>
         int u;
         matrices.push();
         Vec3d vec3d = holdingEntity.getLeashPos(tickDelta);
-        double d = (double)(MathHelper.lerp(tickDelta, ((MobEntity)entity).bodyYaw, ((MobEntity)entity).prevBodyYaw) * ((float)Math.PI / 180)) + 1.5707963267948966;
+        double d = (double)(MathHelper.lerp(tickDelta, entity.bodyYaw, entity.prevBodyYaw) * ((float)Math.PI / 180)) + 1.5707963267948966;
         Vec3d vec3d2 = ((Entity)entity).getLeashOffset();
         double e = Math.cos(d) * vec3d2.z + Math.sin(d) * vec3d2.x;
         double f = Math.sin(d) * vec3d2.z - Math.cos(d) * vec3d2.x;
-        double g = MathHelper.lerp((double)tickDelta, ((MobEntity)entity).prevX, ((Entity)entity).getX()) + e;
-        double h = MathHelper.lerp((double)tickDelta, ((MobEntity)entity).prevY, ((Entity)entity).getY()) + vec3d2.y;
-        double i = MathHelper.lerp((double)tickDelta, ((MobEntity)entity).prevZ, ((Entity)entity).getZ()) + f;
+        double g = MathHelper.lerp(tickDelta, entity.prevX, entity.getX()) + e;
+        double h = MathHelper.lerp(tickDelta, entity.prevY, entity.getY()) + vec3d2.y;
+        double i = MathHelper.lerp(tickDelta, entity.prevZ, entity.getZ()) + f;
         matrices.translate(e, vec3d2.y, f);
         float j = (float)(vec3d.x - g);
         float k = (float)(vec3d.y - h);
         float l = (float)(vec3d.z - i);
-        float m = 0.025f;
         VertexConsumer vertexConsumer = provider.getBuffer(RenderLayer.getLeash());
         Matrix4f matrix4f = matrices.peek().getPositionMatrix();
         float n = MathHelper.fastInverseSqrt(j * j + l * l) * 0.025f / 2.0f;
         float o = l * n;
         float p = j * n;
-        BlockPos blockPos = new BlockPos(((Entity)entity).getCameraPosVec(tickDelta));
+        BlockPos blockPos = new BlockPos(entity.getCameraPosVec(tickDelta));
         BlockPos blockPos2 = new BlockPos(holdingEntity.getCameraPosVec(tickDelta));
         int q = this.getBlockLight(entity, blockPos);
         int r = holdingEntity.isOnFire()?15: holdingEntity.world.getLightLevel(LightType.BLOCK, blockPos2);
-        int s = ((MobEntity)entity).world.getLightLevel(LightType.SKY, blockPos);
-        int t = ((MobEntity)entity).world.getLightLevel(LightType.SKY, blockPos2);
+        int s = entity.world.getLightLevel(LightType.SKY, blockPos);
+        int t = entity.world.getLightLevel(LightType.SKY, blockPos2);
         for (u = 0; u <= 24; ++u) {
             MegaParrotRenderer.renderLeashPiece(vertexConsumer, matrix4f, j, k, l, q, r, s, t, 0.025f, 0.025f, o, p, u, false);
         }

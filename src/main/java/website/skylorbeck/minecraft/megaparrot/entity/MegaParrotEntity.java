@@ -17,6 +17,7 @@ import net.minecraft.entity.passive.ParrotEntity;
 import net.minecraft.entity.passive.RabbitEntity;
 import net.minecraft.entity.passive.TurtleEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.HorseArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -291,6 +292,15 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
         if (eatingTicks>0)
             eatingTicks--;
         super.tick();
+    }
+    @Override
+    public boolean hasArmorSlot() {
+        return true;
+    }
+
+    @Override
+    public boolean isHorseArmor(ItemStack item) {
+        return item.getItem() instanceof HorseArmorItem;
     }
 
     //gecko
