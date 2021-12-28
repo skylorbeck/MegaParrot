@@ -23,7 +23,7 @@
       "website.skylorbeck.minecraft.megaparrot.client.MegaparrotClient"
     ],
     "main": [
-      "website.skylorbeck.minecraft.megaparrot.Megaparrot"
+      "website.skylorbeck.minecraft.megaparrot.MegaParrot"
     ]
   },
   "mixins": [

@@ -1,8 +1,10 @@
 package website.skylorbeck.minecraft.megaparrot.entity;
 
 import net.minecraft.util.Identifier;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import website.skylorbeck.minecraft.megaparrot.Declarar;
 
 public class MegaParrotModel extends AnimatedGeoModel<MegaParrotEntity> {
@@ -13,7 +15,23 @@ public class MegaParrotModel extends AnimatedGeoModel<MegaParrotEntity> {
 
     @Override
     public Identifier getTextureLocation(MegaParrotEntity object) {
-        return Declarar.getMegaParrotId("textures/entity/red_parrot.png");
+        switch (object.getVariant()){
+            default -> {
+                return Declarar.getMegaParrotId("textures/entity/red_parrot.png");
+            }
+            case 1 -> {
+                return Declarar.getMegaParrotId("textures/entity/blue_parrot.png");
+            }
+            case 2 -> {
+                return Declarar.getMegaParrotId("textures/entity/cyan_parrot.png");
+            }
+            case 3 -> {
+                return Declarar.getMegaParrotId("textures/entity/green_parrot.png");
+            }
+            case 4 -> {
+                return Declarar.getMegaParrotId("textures/entity/grey_parrot.png");
+            }
+        }
     }
 
     @Override
@@ -21,9 +39,17 @@ public class MegaParrotModel extends AnimatedGeoModel<MegaParrotEntity> {
         return Declarar.getMegaParrotId("animations/mega_parrot.animation.json");
     }
 
+    @SuppressWarnings({ "unchecked"})
     @Override
-    public void setLivingAnimations(MegaParrotEntity entity, Integer uniqueID) {
-        super.setLivingAnimations(entity, uniqueID);
+    public void setLivingAnimations(MegaParrotEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
+        super.setLivingAnimations(entity, uniqueID, customPredicate);
+        IBone head = this.getAnimationProcessor().getBone("head");
+
+        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+        if (head != null) {
+            head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
+            head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
+        }
     }
 
     @Override
