@@ -25,3 +25,11 @@ public class MegaParrot implements ModInitializer {
         Registry.register(Registry.ITEM,Declarar.getMegaParrotId("spawn_egg"),Declarar.MEGA_PARROT_EGG);
     }
 }
+//todo
+// floating seat
+// saddle
+// missing lead
+// feeding animation
+// attack animation
+// armor
+// breeding?
