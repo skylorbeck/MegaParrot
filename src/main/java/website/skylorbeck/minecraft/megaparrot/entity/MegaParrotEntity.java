@@ -61,7 +61,7 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     private final AnimationFactory factory = new AnimationFactory(this);
     private static final TrackedData<Integer> VARIANT = DataTracker.registerData(MegaParrotEntity.class, TrackedDataHandlerRegistry.INTEGER);
     protected int soundTicks;
-    protected boolean isEating = false;
+    protected int eatingTicks = 0;
 
     public MegaParrotEntity(EntityType<? extends HorseBaseEntity> entityType, World world) {
         super(entityType, world);
@@ -239,7 +239,7 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     private void playEatingAnimation() {
         SoundEvent soundEvent;
         ((HorseBaseEntityAccessor)this).invokeSetEating();
-        this.isEating = true;
+        this.eatingTicks = 10;
         if (!this.isSilent() && (soundEvent = this.getEatSound()) != null) {
             this.world.playSound(null, this.getX(), this.getY(), this.getZ(), soundEvent, this.getSoundCategory(), 1.0f, 1.0f + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f);
         }
@@ -295,7 +295,14 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
         return SoundEvents.ENTITY_PARROT_IMITATE_ENDERMITE;
     }
 
-//gecko
+    @Override
+    public void tick() {
+        if (eatingTicks>0)
+            eatingTicks--;
+        super.tick();
+    }
+
+    //gecko
     @Override
     public void registerControllers(AnimationData animationData) {
         animationData.addAnimationController(new AnimationController(this, "locomotion_controller", 5, this::locomotion_predicate));
@@ -323,9 +330,10 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     }
     private <E extends IAnimatable> PlayState eating_predicate(AnimationEvent<E> event)
     {
-        if (isEating){
+        if (eatingTicks>0){
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.mega_parrot.eat", false));
-            isEating = false;
+        } else {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.mega_parrot.wing_flutter", false));
         }
         return PlayState.CONTINUE;
     }
