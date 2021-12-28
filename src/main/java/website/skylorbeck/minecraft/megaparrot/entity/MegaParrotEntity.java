@@ -1,13 +1,12 @@
 package website.skylorbeck.minecraft.megaparrot.entity;
 
-import net.minecraft.entity.EntityData;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.HorseBaseEntity;
 import net.minecraft.entity.passive.HorseColor;
 import net.minecraft.entity.passive.HorseEntity;
@@ -19,6 +18,7 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Util;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
@@ -144,8 +144,32 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
 
+    @Override
+    public Vec3d getLeashOffset() {
+        return new Vec3d(0.0, 0.5f * this.getStandingEyeHeight(), this.getWidth() * 0.2f);
+    }
+    public double getMountedHeightOffset() {
+        return this.getDimensions(this.getPose()).height * 0.4;
+    }
+    @Override
+    public void updatePassengerPosition(Entity passenger) {
+        super.updatePassengerPosition(passenger);
+        if (passenger instanceof MobEntity mobEntity) {
+            this.bodyYaw = mobEntity.bodyYaw;
+        }
+        float mobEntity = MathHelper.sin(this.bodyYaw * ((float) Math.PI / 180));
+        float f = MathHelper.cos(this.bodyYaw * ((float) Math.PI / 180));
+        float g = 0.5f;
+        passenger.setPosition(this.getX() + (double) (g * mobEntity), this.getY() + this.getMountedHeightOffset() + passenger.getHeightOffset(), this.getZ() - (double) (g * f));
+        if (passenger instanceof LivingEntity) {
+            ((LivingEntity) passenger).bodyYaw = this.bodyYaw;
+        }
+    }
 
 
+
+
+//gecko
     @Override
     public void registerControllers(AnimationData animationData) {
         animationData.addAnimationController(new AnimationController(this, "locomotion_controller", 5, this::locomotion_predicate));

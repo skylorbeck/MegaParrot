@@ -6,7 +6,7 @@
 				"identifier": "geometry.mega_parrot",
 				"texture_width": 64,
 				"texture_height": 64,
-				"visible_bounds_width": 4,
+				"visible_bounds_width": 5,
 				"visible_bounds_height": 3.5,
 				"visible_bounds_offset": [0, 1.25, 0]
 			},
@@ -32,6 +32,45 @@
 								"west": {"uv": [6, 10], "uv_size": [6, 10]},
 								"up": {"uv": [28, 20], "uv_size": [8, 6]},
 								"down": {"uv": [28, 32], "uv_size": [8, -6]}
+							}
+						}
+					]
+				},
+				{
+					"name": "saddle",
+					"parent": "core",
+					"pivot": [0, 13, 3],
+					"cubes": [
+						{
+							"origin": [-5, 9, 3],
+							"size": [10, 8, 1],
+							"pivot": [0, 13, 3],
+							"rotation": [80, 0, 0],
+							"uv": {
+								"north": {"uv": [54, 9], "uv_size": [10, -9]},
+								"east": {"uv": [54, 9], "uv_size": [1, -9]},
+								"south": {"uv": [54, 8], "uv_size": [10, -8]},
+								"west": {"uv": [54, 9], "uv_size": [1, -9]},
+								"up": {"uv": [64, 8], "uv_size": [-10, 1]},
+								"down": {"uv": [64, 8], "uv_size": [-10, 1]}
+							}
+						},
+						{
+							"origin": [-4, 13, 8],
+							"size": [8, -9, 0],
+							"pivot": [0, 13, 3],
+							"rotation": [-90, 80, -90],
+							"uv": {
+								"south": {"uv": [54, 19], "uv_size": [9, -9]}
+							}
+						},
+						{
+							"origin": [-4, 13, 8],
+							"size": [8, -9, 0],
+							"pivot": [0, 13, 3],
+							"rotation": [-90, -80, 90],
+							"uv": {
+								"south": {"uv": [63, 19], "uv_size": [-9, -9]}
 							}
 						}
 					]
