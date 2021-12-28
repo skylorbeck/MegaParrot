@@ -11,8 +11,11 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.entity.passive.HorseBaseEntity;
 import net.minecraft.entity.passive.ParrotEntity;
+import net.minecraft.entity.passive.RabbitEntity;
+import net.minecraft.entity.passive.TurtleEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -42,9 +45,10 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import website.skylorbeck.minecraft.megaparrot.mixin.HorseBaseEntityAccessor;
 
 import java.util.Arrays;
+import java.util.function.Predicate;
 
 public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
-    private static final Item[] BREEDING_INGREDIENT = {Items.WHEAT_SEEDS,Items.MELON_SEEDS,Items.BEETROOT_SEEDS,Items.PUMPKIN_SEEDS, Items.APPLE, Items.GOLDEN_CARROT, Items.GOLDEN_APPLE, Items.ENCHANTED_GOLDEN_APPLE};
+    private static final Item[] BREEDING_INGREDIENT = {Items.WHEAT_SEEDS,Items.MELON_SEEDS,Items.BEETROOT_SEEDS,Items.PUMPKIN_SEEDS, Items.APPLE, Items.CARROT,Items.BEETROOT,Items.POTATO, Items.GOLDEN_CARROT, Items.GOLDEN_APPLE, Items.ENCHANTED_GOLDEN_APPLE};
     private final AnimationFactory factory = new AnimationFactory(this);
     private static final TrackedData<Integer> VARIANT = DataTracker.registerData(MegaParrotEntity.class, TrackedDataHandlerRegistry.INTEGER);
     protected int soundTicks;

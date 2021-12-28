@@ -26,6 +26,7 @@ public class MegaParrot implements ModInitializer {
     }
 }
 //todo
-// attack animation
 // armor
 // lang
+// drops
+//attack animation?
