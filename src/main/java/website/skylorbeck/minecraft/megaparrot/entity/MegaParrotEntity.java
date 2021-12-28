@@ -1,20 +1,27 @@
 package website.skylorbeck.minecraft.megaparrot.entity;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.HorseBaseEntity;
 import net.minecraft.entity.passive.HorseColor;
 import net.minecraft.entity.passive.HorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Util;
@@ -23,6 +30,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -32,8 +40,12 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
+    private static final Item[] BREEDING_INGREDIENT = {Items.WHEAT_SEEDS,Items.MELON_SEEDS,Items.BEETROOT_SEEDS,Items.PUMPKIN_SEEDS, Items.APPLE, Items.GOLDEN_CARROT, Items.GOLDEN_APPLE, Items.ENCHANTED_GOLDEN_APPLE};
     private final AnimationFactory factory = new AnimationFactory(this);
     private static final TrackedData<Integer> VARIANT = DataTracker.registerData(MegaParrotEntity.class, TrackedDataHandlerRegistry.INTEGER);
 
@@ -93,7 +105,13 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
         if (!itemStack.isEmpty()) {
             boolean bl;
             if (this.isBreedingItem(itemStack)) {
-                return this.interactHorse(player, itemStack);
+                return this.interactBird(player, itemStack);
+            }
+            if (itemStack.isOf(Items.COOKIE)) {
+                this.addStatusEffect(new StatusEffectInstance(StatusEffects.POISON, 900));
+                if (player.isCreative() || !this.isInvulnerable()) {
+                    this.damage(DamageSource.player(player), Float.MAX_VALUE);
+                }
             }
             ActionResult actionResult = itemStack.useOnEntity(player, this, hand);
             if (actionResult.isAccepted()) {
@@ -108,13 +126,22 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
                 this.openInventory(player);
                 return ActionResult.success(this.world.isClient);
             }
-        }
-        if (this.isBaby()) {
-            return super.interactMob(player, hand);
-        }
+        } else
         this.putPlayerOnBack(player);
         return ActionResult.success(this.world.isClient);
     }
+    public ActionResult interactBird(PlayerEntity player, ItemStack stack) {
+        boolean bl = this.receiveFood(player, stack);
+//        Logger.getGlobal().log(Level.SEVERE,bl+"");
+        if (!player.getAbilities().creativeMode) {
+            stack.decrement(1);
+        }
+        if (this.world.isClient) {
+            return ActionResult.CONSUME;
+        }
+        return bl ? ActionResult.SUCCESS : ActionResult.PASS;
+    }
+
     @Override
     protected void initGoals() {
         this.goalSelector.add(1, new EscapeDangerGoal(this, 1.2));
@@ -133,13 +160,6 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     @Override
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
-        HorseColor horseColor;
-        if (entityData instanceof HorseEntity.HorseData) {
-            horseColor = ((HorseEntity.HorseData)entityData).color;
-        } else {
-            horseColor = Util.getRandom(HorseColor.values(), this.random);
-            entityData = new HorseEntity.HorseData(horseColor);
-        }
         this.setVariant(this.random.nextInt(5));
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
@@ -165,8 +185,48 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
             ((LivingEntity) passenger).bodyYaw = this.bodyYaw;
         }
     }
-
-
+    protected boolean receiveFood(PlayerEntity player, ItemStack item) {
+        boolean bl = false;
+        float health = 0.0f;
+        int temper = 0;
+        if (Arrays.stream(BREEDING_INGREDIENT).anyMatch((item::isOf))) {
+            health = 2f;
+            temper = 3;
+        } else if (item.isOf(Items.GOLDEN_CARROT)) {
+            health = 4.0f;
+            temper = 5;
+            if (!this.world.isClient && this.isTame() && this.getBreedingAge() == 0 && !this.isInLove()) {
+                bl = true;
+                this.lovePlayer(player);
+            }
+        } else if (item.isOf(Items.GOLDEN_APPLE) || item.isOf(Items.ENCHANTED_GOLDEN_APPLE)) {
+            health = 10.0f;
+            temper = 10;
+            if (!this.world.isClient && this.isTame() && this.getBreedingAge() == 0 && !this.isInLove()) {
+                bl = true;
+                this.lovePlayer(player);
+            }
+        }
+        if (this.getHealth() < this.getMaxHealth() && health > 0.0f) {
+            this.heal(health);
+            bl = true;
+        }
+        if (temper > 0 && (bl || !this.isTame()) && this.getTemper() < this.getMaxTemper()) {
+            bl = true;
+            if (!this.world.isClient) {
+                this.addTemper(temper);
+            }
+        }
+        if (bl) {
+            //this.playEatingAnimation();
+            this.emitGameEvent(GameEvent.EAT, this.getCameraBlockPos());
+        }
+        return bl;
+    }
+    @Override
+    public boolean isBreedingItem(ItemStack stack) {
+        return (Arrays.stream(BREEDING_INGREDIENT).anyMatch(stack::isOf));
+    }
 
 
 //gecko
