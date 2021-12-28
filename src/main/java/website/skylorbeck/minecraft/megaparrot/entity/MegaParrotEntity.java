@@ -1,5 +1,8 @@
 package website.skylorbeck.minecraft.megaparrot.entity;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
@@ -14,6 +17,7 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.HorseBaseEntity;
 import net.minecraft.entity.passive.HorseColor;
 import net.minecraft.entity.passive.HorseEntity;
+import net.minecraft.entity.passive.ParrotEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -21,12 +25,16 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Util;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
@@ -39,8 +47,12 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import website.skylorbeck.minecraft.megaparrot.mixin.HorseBaseEntityAccessor;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -48,6 +60,8 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     private static final Item[] BREEDING_INGREDIENT = {Items.WHEAT_SEEDS,Items.MELON_SEEDS,Items.BEETROOT_SEEDS,Items.PUMPKIN_SEEDS, Items.APPLE, Items.GOLDEN_CARROT, Items.GOLDEN_APPLE, Items.ENCHANTED_GOLDEN_APPLE};
     private final AnimationFactory factory = new AnimationFactory(this);
     private static final TrackedData<Integer> VARIANT = DataTracker.registerData(MegaParrotEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    protected int soundTicks;
+    protected boolean isEating = false;
 
     public MegaParrotEntity(EntityType<? extends HorseBaseEntity> entityType, World world) {
         super(entityType, world);
@@ -132,7 +146,6 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     }
     public ActionResult interactBird(PlayerEntity player, ItemStack stack) {
         boolean bl = this.receiveFood(player, stack);
-//        Logger.getGlobal().log(Level.SEVERE,bl+"");
         if (!player.getAbilities().creativeMode) {
             stack.decrement(1);
         }
@@ -218,22 +231,76 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
             }
         }
         if (bl) {
-            //this.playEatingAnimation();
+            this.playEatingAnimation();
             this.emitGameEvent(GameEvent.EAT, this.getCameraBlockPos());
         }
         return bl;
     }
+    private void playEatingAnimation() {
+        SoundEvent soundEvent;
+        ((HorseBaseEntityAccessor)this).invokeSetEating();
+        this.isEating = true;
+        if (!this.isSilent() && (soundEvent = this.getEatSound()) != null) {
+            this.world.playSound(null, this.getX(), this.getY(), this.getZ(), soundEvent, this.getSoundCategory(), 1.0f, 1.0f + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f);
+        }
+    }
+
     @Override
     public boolean isBreedingItem(ItemStack stack) {
         return (Arrays.stream(BREEDING_INGREDIENT).anyMatch(stack::isOf));
     }
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        ++this.soundTicks;
+        if (this.soundTicks > 5) {
+            this.playSound(SoundEvents.ENTITY_PARROT_STEP, 0.30f, 0f);
+        }
+    }
+    public float getSoundPitch() {
+        return (this.random.nextFloat() - this.random.nextFloat()) * 0.2f - 1.0f;
+    }
+    @Override
+    protected void playWalkSound(BlockSoundGroup group) {
+        super.playWalkSound(group);
+            this.playSound(SoundEvents.ENTITY_PARROT_STEP, group.getVolume() * 0.6f, group.getPitch());
+    }
 
+    @Override
+    @Nullable
+    public SoundEvent getAmbientSound() {
+        return ParrotEntity.getRandomSound(this.world, this.world.random);
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        super.getDeathSound();
+        return SoundEvents.ENTITY_PARROT_DEATH;
+    }
+
+    @Override
+    @Nullable
+    protected SoundEvent getEatSound() {
+        return SoundEvents.ENTITY_PARROT_EAT;
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        super.getHurtSound(source);
+        return SoundEvents.ENTITY_PARROT_HURT;
+    }
+
+    @Override
+    protected SoundEvent getAngrySound() {
+        super.getAngrySound();
+        return SoundEvents.ENTITY_PARROT_IMITATE_ENDERMITE;
+    }
 
 //gecko
     @Override
     public void registerControllers(AnimationData animationData) {
         animationData.addAnimationController(new AnimationController(this, "locomotion_controller", 5, this::locomotion_predicate));
         animationData.addAnimationController(new AnimationController(this, "flutter_controller", 0, this::flutter_predicate));
+        animationData.addAnimationController(new AnimationController(this, "eating_controller", 0, this::eating_predicate));
     }
 
     private <E extends IAnimatable> PlayState locomotion_predicate(AnimationEvent<E> event) {
@@ -252,6 +319,14 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     {
         if (this.world.random.nextFloat()<=0.01f)
         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.mega_parrot.wing_flutter", false));
+        return PlayState.CONTINUE;
+    }
+    private <E extends IAnimatable> PlayState eating_predicate(AnimationEvent<E> event)
+    {
+        if (isEating){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.mega_parrot.eat", false));
+            isEating = false;
+        }
         return PlayState.CONTINUE;
     }
 

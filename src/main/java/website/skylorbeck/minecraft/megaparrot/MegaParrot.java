@@ -26,10 +26,6 @@ public class MegaParrot implements ModInitializer {
     }
 }
 //todo
-// food
-// feeding animation
 // attack animation
 // armor
-// breeding?
-// sound
 // lang
