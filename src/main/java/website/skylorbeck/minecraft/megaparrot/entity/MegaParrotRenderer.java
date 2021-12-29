@@ -17,9 +17,11 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 public class MegaParrotRenderer extends GeoEntityRenderer<MegaParrotEntity>
 {
+    @SuppressWarnings("unchecked")
     public MegaParrotRenderer(EntityRendererFactory.Context renderManager)
     {
         super(renderManager, new MegaParrotModel());
+        this.addLayer(new MegaParrotArmorLayer(this));
         this.shadowRadius = 0.7F;
     }
 

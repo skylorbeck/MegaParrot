@@ -3,6 +3,7 @@ package website.skylorbeck.minecraft.megaparrot.entity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
@@ -46,6 +47,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import website.skylorbeck.minecraft.megaparrot.mixin.HorseBaseEntityAccessor;
 
 import java.util.Arrays;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
@@ -54,6 +56,8 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     private static final TrackedData<Integer> VARIANT = DataTracker.registerData(MegaParrotEntity.class, TrackedDataHandlerRegistry.INTEGER);
     protected int soundTicks;
     protected int eatingTicks = 0;
+    private static final UUID HORSE_ARMOR_BONUS_ID = UUID.fromString("556E1665-8B10-40C8-8F9D-CF9B1667F295");
+
 
     public MegaParrotEntity(EntityType<? extends HorseBaseEntity> entityType, World world) {
         super(entityType, world);
@@ -302,7 +306,33 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     public boolean isHorseArmor(ItemStack item) {
         return item.getItem() instanceof HorseArmorItem;
     }
+    public ItemStack getArmorType() {
+        return this.getEquippedStack(EquipmentSlot.CHEST);
+    }
+    private void equipArmor(ItemStack stack) {
+        this.equipStack(EquipmentSlot.CHEST, stack);
+        this.setEquipmentDropChance(EquipmentSlot.CHEST, 0.0f);
+    }
+    @Override
+    protected void updateSaddle() {
+        if (this.world.isClient) {
+            return;
+        }
+        super.updateSaddle();
+        this.setArmorTypeFromStack(this.items.getStack(1));
+        this.setEquipmentDropChance(EquipmentSlot.CHEST, 0.0f);
+    }
 
+    private void setArmorTypeFromStack(ItemStack stack) {
+        this.equipArmor(stack);
+        if (!this.world.isClient) {
+            int i;
+            this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).removeModifier(HORSE_ARMOR_BONUS_ID);
+            if (this.isHorseArmor(stack) && (i = ((HorseArmorItem)stack.getItem()).getBonus()) != 0) {
+                this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).addTemporaryModifier(new EntityAttributeModifier(HORSE_ARMOR_BONUS_ID, "Horse armor bonus", (double)i, EntityAttributeModifier.Operation.ADDITION));
+            }
+        }
+    }
     //gecko
     @Override
     public void registerControllers(AnimationData animationData) {
@@ -343,4 +373,6 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     public AnimationFactory getFactory() {
         return this.factory;
     }
+
+
 }
