@@ -49,6 +49,8 @@ import website.skylorbeck.minecraft.megaparrot.mixin.HorseBaseEntityAccessor;
 import java.util.Arrays;
 import java.util.UUID;
 import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     private static final Item[] BREEDING_INGREDIENT = {Items.WHEAT_SEEDS,Items.MELON_SEEDS,Items.BEETROOT_SEEDS,Items.PUMPKIN_SEEDS, Items.APPLE, Items.CARROT,Items.BEETROOT,Items.POTATO, Items.GOLDEN_CARROT, Items.GOLDEN_APPLE, Items.ENCHANTED_GOLDEN_APPLE};
@@ -68,6 +70,18 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
         this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(this.getChildHealthBonus());
         this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(this.getChildMovementSpeedBonus());
         this.getAttributeInstance(EntityAttributes.HORSE_JUMP_STRENGTH).setBaseValue(this.getChildJumpStrengthBonus());
+//        Logger.getGlobal().log(Level.SEVERE,this.getAttributeInstance(EntityAttributes.HORSE_JUMP_STRENGTH).getValue()+":jump "+this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).getValue()+":speed "+this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).getValue()+":health ");
+    }
+    protected float getChildHealthBonus() {
+        return 15.0f + (float)this.random.nextInt(8) + (float)this.random.nextInt(9);
+    }
+
+    protected double getChildJumpStrengthBonus() {//min 0.3 max 0.7 //horse is 0.4/1.0
+        return (double)0.3f + this.random.nextDouble() * 0.2 + this.random.nextDouble() * 0.1 + this.random.nextDouble() * 0.1;
+    }
+
+    protected double getChildMovementSpeedBonus() {//min 0.2 max 0.4 //horse is .1125/.3375
+        return ((double)0.8f + this.random.nextDouble() * 0.2 + this.random.nextDouble() * 0.2 + this.random.nextDouble() * 0.2) * 0.25;
     }
     @Override
     protected void initDataTracker() {

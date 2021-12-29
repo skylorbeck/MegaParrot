@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "megaparrot:parrot_meat"
+  },
+  "result": "megaparrot:cooked_parrot_meat",
+  "experience": 0.35,
+  "cookingtime": 200
+}

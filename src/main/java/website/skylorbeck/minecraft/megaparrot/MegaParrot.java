@@ -23,11 +23,9 @@ public class MegaParrot implements ModInitializer {
         );
         BiomeModifications.addSpawn(BiomeSelectors.spawnsOneOf(EntityType.PARROT), SpawnGroup.CREATURE,Declarar.MEGA_PARROT_ENTITY_TYPE,50,2,10);
         Registry.register(Registry.ITEM,Declarar.getMegaParrotId("spawn_egg"),Declarar.MEGA_PARROT_EGG);
+        Registry.register(Registry.ITEM,Declarar.getMegaParrotId("parrot_meat"),Declarar.PARROT_MEAT);
+        Registry.register(Registry.ITEM,Declarar.getMegaParrotId("cooked_parrot_meat"),Declarar.COOKED_PARROT_MEAT);
     }
 }
 //todo
-// armor
-// lang
-// drops
-// megaparrot meat
 //attack animation?
