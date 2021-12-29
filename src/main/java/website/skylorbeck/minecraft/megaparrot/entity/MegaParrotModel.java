@@ -7,6 +7,8 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import website.skylorbeck.minecraft.megaparrot.Declarar;
 
+import java.util.Locale;
+
 public class MegaParrotModel extends AnimatedGeoModel<MegaParrotEntity> {
     @Override
     public Identifier getModelLocation(MegaParrotEntity object) {
@@ -15,7 +17,13 @@ public class MegaParrotModel extends AnimatedGeoModel<MegaParrotEntity> {
 
     @Override
     public Identifier getTextureLocation(MegaParrotEntity object) {
-        switch (object.getVariant()){
+        if (object.getCustomName() != null) {
+            String name = object.getName().getString();
+            if (name.equalsIgnoreCase("mordecai")){
+                return Declarar.getMegaParrotId("textures/entity/mordecai.png");
+            }
+        }
+        switch (object.getVariant()) {
             default -> {
                 return Declarar.getMegaParrotId("textures/entity/red_parrot.png");
             }
