@@ -28,4 +28,6 @@ public class MegaParrot implements ModInitializer {
     }
 }
 //todo
+// more textures
+// dont hit orse
 // special plant?
