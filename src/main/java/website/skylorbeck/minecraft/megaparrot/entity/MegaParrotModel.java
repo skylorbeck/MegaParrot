@@ -27,6 +27,9 @@ public class MegaParrotModel extends AnimatedGeoModel<MegaParrotEntity> {
             } else
             if (name.equalsIgnoreCase("Chone")){
                 return Declarar.getMegaParrotId("textures/entity/chone.png");
+            } else
+            if (name.equalsIgnoreCase("SkylorBeck")){
+                return Declarar.getMegaParrotId("textures/entity/noise.png");
             }
         }
         switch (object.getVariant()) {
@@ -44,6 +47,12 @@ public class MegaParrotModel extends AnimatedGeoModel<MegaParrotEntity> {
             }
             case 4 -> {
                 return Declarar.getMegaParrotId("textures/entity/grey_parrot.png");
+            }
+            case 5 -> {
+                return Declarar.getMegaParrotId("textures/entity/snow.png");
+            }
+            case 6 -> {
+                return Declarar.getMegaParrotId("textures/entity/kulu.png");
             }
         }
     }

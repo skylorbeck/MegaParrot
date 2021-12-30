@@ -35,6 +35,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -183,7 +184,9 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     @Override
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
-        this.setVariant(this.random.nextInt(5));
+        BlockPos blockPos = this.getBlockPos();
+        Biome biome = world.getBiome(blockPos);
+        this.setVariant(biome.isCold(blockPos)? 5 : biome.isHot(blockPos)?6: this.random.nextInt(5));
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
 
