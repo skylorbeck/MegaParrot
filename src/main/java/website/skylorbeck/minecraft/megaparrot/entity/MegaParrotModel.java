@@ -21,9 +21,12 @@ public class MegaParrotModel extends AnimatedGeoModel<MegaParrotEntity> {
             String name = object.getName().getString();
             if (name.equalsIgnoreCase("mordecai")){
                 return Declarar.getMegaParrotId("textures/entity/mordecai.png");
-            }
+            } else
             if (name.equalsIgnoreCase("CommissarGrey")){
                 return Declarar.getMegaParrotId("textures/entity/phoenix.png");
+            } else
+            if (name.equalsIgnoreCase("Chone")){
+                return Declarar.getMegaParrotId("textures/entity/chone.png");
             }
         }
         switch (object.getVariant()) {
