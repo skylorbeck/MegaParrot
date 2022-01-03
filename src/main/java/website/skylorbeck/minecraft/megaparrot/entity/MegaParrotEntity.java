@@ -61,7 +61,11 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     protected int eatingTicks = 0;
     private static final UUID HORSE_ARMOR_BONUS_ID = UUID.fromString("556E1665-8B10-40C8-8F9D-CF9B1667F295");
 
-
+    public float flapProgress;
+    public float maxWingDeviation;
+    public float prevMaxWingDeviation;
+    public float prevFlapProgress;
+    private float flapSpeed = 1.0f;
     public MegaParrotEntity(EntityType<? extends HorseBaseEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -211,6 +215,45 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
             ((LivingEntity) passenger).bodyYaw = this.bodyYaw;
         }
     }
+
+    public void tickMovement() {
+        super.tickMovement();
+        this.prevFlapProgress = this.flapProgress;
+        this.prevMaxWingDeviation = this.maxWingDeviation;
+        this.maxWingDeviation = (float)((double)this.maxWingDeviation + (double)(this.onGround ? -1 : 4) * 0.3D);
+        this.maxWingDeviation = MathHelper.clamp(this.maxWingDeviation, 0.0F, 1.0F);
+        if (!this.onGround && this.flapSpeed < 1.0F) {
+            this.flapSpeed = 1.0F;
+        }
+
+        this.flapSpeed = (float)((double)this.flapSpeed * 0.9D);
+        Vec3d vec3d = this.getVelocity();
+        if (!this.onGround && vec3d.y < 0.0D) {
+            this.setVelocity(vec3d.multiply(1.0D, 0.6D, 1.0D));
+        }
+
+        this.flapProgress += this.flapSpeed * 2.0F;
+
+    }
+    @Override
+    protected boolean hasWings() {
+        return this.speed > this.flapProgress;
+    }
+
+    @Override
+    protected void addFlapEffects() {
+        this.playSound(SoundEvents.ENTITY_PARROT_FLY, 0.15f, 1.0f);
+        this.flapProgress = this.speed + this.maxWingDeviation / 2.0f;
+    }
+
+    @Override
+    public boolean handleFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource) {
+        if (fallDistance > 1.0f) {
+            this.playSound(SoundEvents.ENTITY_GOAT_STEP, 0.4f, 1.0f);
+        }
+        return false;
+    }
+
     protected boolean receiveFood(PlayerEntity player, ItemStack item) {
         boolean bl = false;
         float health = 0.0f;
@@ -354,7 +397,7 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     @Override
     public void registerControllers(AnimationData animationData) {
         animationData.addAnimationController(new AnimationController(this, "locomotion_controller", 5, this::locomotion_predicate));
-        animationData.addAnimationController(new AnimationController(this, "flutter_controller", 0, this::flutter_predicate));
+        animationData.addAnimationController(new AnimationController(this, "flutter_controller", 5, this::flutter_predicate));
         animationData.addAnimationController(new AnimationController(this, "eating_controller", 0, this::eating_predicate));
     }
 
@@ -372,8 +415,12 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
 
     private <E extends IAnimatable> PlayState flutter_predicate(AnimationEvent<E> event)
     {
-        if (this.world.random.nextFloat()<=0.01f)
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.mega_parrot.wing_flutter", false));
+//        Logger.getGlobal().log(Level.SEVERE,this.hasWings()+"haswing");
+        if (this.fallDistance>0) {//this.world.random.nextFloat()<=0.01f||
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.mega_parrot.wing_flutter", true));
+        } else {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.mega_parrot.wing_flutter",false));
+        }
         return PlayState.CONTINUE;
     }
     private <E extends IAnimatable> PlayState eating_predicate(AnimationEvent<E> event)
