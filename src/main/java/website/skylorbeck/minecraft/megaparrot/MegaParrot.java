@@ -22,8 +22,8 @@ public class MegaParrot implements ModInitializer {
                         .add(EntityAttributes.GENERIC_MAX_HEALTH, 53.0)
                         .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.325f)
         );
-        BiomeModifications.addSpawn(BiomeSelectors.categories(Biome.Category.JUNGLE), SpawnGroup.CREATURE,Declarar.MEGA_PARROT_ENTITY_TYPE,50,2,4);
-        BiomeModifications.addSpawn(BiomeSelectors.categories(Biome.Category.TAIGA,Biome.Category.DESERT, Biome.Category.PLAINS, Biome.Category.MESA, Biome.Category.ICY), SpawnGroup.CREATURE,Declarar.MEGA_PARROT_ENTITY_TYPE,15,1,2);
+        BiomeModifications.addSpawn(BiomeSelectors.categories(Biome.Category.JUNGLE), SpawnGroup.CREATURE,Declarar.MEGA_PARROT_ENTITY_TYPE,24,2,4);
+        BiomeModifications.addSpawn(BiomeSelectors.categories(Biome.Category.TAIGA,Biome.Category.DESERT, Biome.Category.PLAINS, Biome.Category.MESA, Biome.Category.ICY), SpawnGroup.CREATURE,Declarar.MEGA_PARROT_ENTITY_TYPE,6,1,2);
         Registry.register(Registry.ITEM,Declarar.getMegaParrotId("spawn_egg"),Declarar.MEGA_PARROT_EGG);
         Registry.register(Registry.ITEM,Declarar.getMegaParrotId("parrot_meat"),Declarar.PARROT_MEAT);
         Registry.register(Registry.ITEM,Declarar.getMegaParrotId("cooked_parrot_meat"),Declarar.COOKED_PARROT_MEAT);

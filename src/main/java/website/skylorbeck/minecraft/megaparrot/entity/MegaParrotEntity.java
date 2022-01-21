@@ -402,8 +402,10 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     }
 
     private <E extends IAnimatable> PlayState locomotion_predicate(AnimationEvent<E> event) {
+        MegaParrotEntity megaParrot = (MegaParrotEntity) event.getAnimatable();
+
         if (event.isMoving()) {
-            Vec3d vec3d = this.getVelocity().normalize();
+            Vec3d vec3d = megaParrot.getVelocity().normalize();
             if (vec3d.x > 0.5f || vec3d.x < -0.5f || vec3d.z > 0.5f || vec3d.z < -0.5f)
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.mega_parrot.run", true));
             else
@@ -415,8 +417,8 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
 
     private <E extends IAnimatable> PlayState flutter_predicate(AnimationEvent<E> event)
     {
-//        Logger.getGlobal().log(Level.SEVERE,this.hasWings()+"haswing");
-        if (this.fallDistance>0) {//this.world.random.nextFloat()<=0.01f||
+
+        if (this.fallDistance>0) {//todo fix this animating only when player falls
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.mega_parrot.wing_flutter", true));
         } else {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.mega_parrot.wing_flutter",false));
@@ -425,7 +427,7 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     }
     private <E extends IAnimatable> PlayState eating_predicate(AnimationEvent<E> event)
     {
-        if (eatingTicks>0){
+        if (this.eatingTicks>0){
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.mega_parrot.eat", false));
         } else {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.mega_parrot.wing_flutter", false));
@@ -437,6 +439,5 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     public AnimationFactory getFactory() {
         return this.factory;
     }
-
 
 }

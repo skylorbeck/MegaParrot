@@ -10,6 +10,7 @@ import website.skylorbeck.minecraft.megaparrot.Declarar;
 import java.util.Locale;
 
 public class MegaParrotModel extends AnimatedGeoModel<MegaParrotEntity> {
+
     @Override
     public Identifier getModelLocation(MegaParrotEntity object) {
         return Declarar.getMegaParrotId("geo/mega_parrot.geo.json");

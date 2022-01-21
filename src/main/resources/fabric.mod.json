@@ -5,7 +5,7 @@
   "name": "Megaparrot",
   "description": "Adds super-sized, rideable, parrots!",
   "authors": [
-    "Author: SkylorBeck",
+    "Author: Skylor Beck",
     "Patrons:",
     "Ch'one No akumus",
     "Striker99974"
@@ -33,6 +33,7 @@
   "depends": {
     "fabricloader": ">=0.12.12",
     "fabric": "*",
-    "minecraft": "1.18.1"
+    "minecraft": "1.18.1",
+    "geckolib3": ">=3.0.23"
   }
 }
