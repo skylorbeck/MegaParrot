@@ -57,6 +57,7 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     private static final Item[] BREEDING_INGREDIENT = {Items.WHEAT_SEEDS,Items.MELON_SEEDS,Items.BEETROOT_SEEDS,Items.PUMPKIN_SEEDS, Items.APPLE, Items.CARROT,Items.BEETROOT,Items.POTATO, Items.GOLDEN_CARROT, Items.GOLDEN_APPLE, Items.ENCHANTED_GOLDEN_APPLE};
     private final AnimationFactory factory = new AnimationFactory(this);
     private static final TrackedData<Integer> VARIANT = DataTracker.registerData(MegaParrotEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Float> FALLING = DataTracker.registerData(MegaParrotEntity.class, TrackedDataHandlerRegistry.FLOAT);
     protected int soundTicks;
     protected int eatingTicks = 0;
     private static final UUID HORSE_ARMOR_BONUS_ID = UUID.fromString("556E1665-8B10-40C8-8F9D-CF9B1667F295");
@@ -92,6 +93,7 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     protected void initDataTracker() {
         super.initDataTracker();
         this.dataTracker.startTracking(VARIANT, 0);
+        this.dataTracker.startTracking(FALLING, 0f);
     }
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
@@ -355,6 +357,7 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     public void tick() {
         if (eatingTicks>0)
             eatingTicks--;
+
         super.tick();
     }
     @Override
@@ -396,9 +399,9 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     //gecko
     @Override
     public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController(this, "locomotion_controller", 5, this::locomotion_predicate));
-        animationData.addAnimationController(new AnimationController(this, "flutter_controller", 5, this::flutter_predicate));
-        animationData.addAnimationController(new AnimationController(this, "eating_controller", 0, this::eating_predicate));
+        animationData.addAnimationController(new AnimationController<>(this, "locomotion_controller", 5, this::locomotion_predicate));
+        animationData.addAnimationController(new AnimationController<>(this, "flutter_controller", 5, this::flutter_predicate));
+        animationData.addAnimationController(new AnimationController<>(this, "eating_controller", 0, this::eating_predicate));
     }
 
     private <E extends IAnimatable> PlayState locomotion_predicate(AnimationEvent<E> event) {
@@ -417,8 +420,10 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
 
     private <E extends IAnimatable> PlayState flutter_predicate(AnimationEvent<E> event)
     {
+        MegaParrotEntity megaParrot = (MegaParrotEntity) event.getAnimatable();
+//        Logger.getGlobal().log(Level.SEVERE,megaParrot.dataTracker.get(FALLING)>0?megaParrot.dataTracker.get(FALLING)+"":"");
 
-        if (this.fallDistance>0) {//todo fix this animating only when player falls
+        if (megaParrot.fallDistance>0) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.mega_parrot.wing_flutter", true));
         } else {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.mega_parrot.wing_flutter",false));
