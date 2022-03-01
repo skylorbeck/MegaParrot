@@ -191,7 +191,7 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     @Nullable
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
         BlockPos blockPos = this.getBlockPos();
-        Biome biome = world.getBiome(blockPos);
+        Biome biome = world.getBiome(blockPos).value();
         this.setVariant(biome.isCold(blockPos)? 5 : biome.isHot(blockPos)?6: this.random.nextInt(5));
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
