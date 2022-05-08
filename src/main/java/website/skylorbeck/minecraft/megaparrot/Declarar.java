@@ -10,6 +10,7 @@ import website.skylorbeck.minecraft.megaparrot.entity.MegaParrotEntity;
 
 public class Declarar {
     public static String MODID = "megaparrot";
+    public static ParrotConfig config = new ParrotConfig();
 
     public static Identifier getMegaParrotId(String path) {
         return new Identifier(MODID, path);

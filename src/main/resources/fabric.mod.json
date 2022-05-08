@@ -25,6 +25,9 @@
     ],
     "main": [
       "website.skylorbeck.minecraft.megaparrot.MegaParrot"
+    ],
+    "modmenu": [
+      "website.skylorbeck.minecraft.megaparrot.ModMenuIntegration"
     ]
   },
   "mixins": [
@@ -34,6 +37,7 @@
     "fabricloader": ">=0.13.3",
     "fabric": "*",
     "minecraft": "1.18.2",
-    "geckolib3": ">=3.0.35"
+    "geckolib3": ">=3.0.35",
+    "cloth-config": ">=6.2.57"
   }
 }
