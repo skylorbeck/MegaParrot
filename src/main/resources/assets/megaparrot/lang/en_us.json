@@ -18,5 +18,6 @@
   "entity.megaparrot.megaparrot": "Mega-Parrot",
   "item.megaparrot.spawn_egg": "Mega-Parrot Egg",
   "item.megaparrot.parrot_meat": "Raw Parrot Meat",
-  "item.megaparrot.cooked_parrot_meat": "Cooked Parrot Meat"
+  "item.megaparrot.cooked_parrot_meat": "Cooked Parrot Meat",
+  "item.megaparrot.bird_whistle": "Bird Whistle"
 }

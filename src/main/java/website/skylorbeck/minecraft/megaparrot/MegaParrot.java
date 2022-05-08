@@ -64,6 +64,7 @@ public class MegaParrot implements ModInitializer {
         Registry.register(Registry.ITEM,Declarar.getMegaParrotId("spawn_egg"),Declarar.MEGA_PARROT_EGG);
         Registry.register(Registry.ITEM,Declarar.getMegaParrotId("parrot_meat"),Declarar.PARROT_MEAT);
         Registry.register(Registry.ITEM,Declarar.getMegaParrotId("cooked_parrot_meat"),Declarar.COOKED_PARROT_MEAT);
+        Registry.register(Registry.ITEM,Declarar.getMegaParrotId("bird_whistle"),Declarar.BIRD_WHISTLE);
     }
 }
 //todo

@@ -7,6 +7,7 @@ import net.minecraft.item.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import website.skylorbeck.minecraft.megaparrot.entity.MegaParrotEntity;
+import website.skylorbeck.minecraft.megaparrot.item.BirdWhistle;
 
 public class Declarar {
     public static String MODID = "megaparrot";
@@ -25,4 +26,6 @@ public class Declarar {
     public static final Item MEGA_PARROT_EGG = new SpawnEggItem(MEGA_PARROT_ENTITY_TYPE, 11141120, 5592575, new FabricItemSettings().group(ItemGroup.MISC));
     public static final Item PARROT_MEAT = new Item(new Item.Settings().group(ItemGroup.FOOD).food(FoodComponents.CHICKEN));
     public static final Item COOKED_PARROT_MEAT = new Item(new Item.Settings().group(ItemGroup.FOOD).food(FoodComponents.COOKED_CHICKEN));
+
+    public static final Item BIRD_WHISTLE = new BirdWhistle(new FabricItemSettings().group(ItemGroup.MISC));
 }
