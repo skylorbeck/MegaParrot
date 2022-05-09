@@ -48,10 +48,10 @@ public class MegaParrotModel extends AnimatedGeoModel<MegaParrotEntity> {
                 return Declarar.getMegaParrotId("textures/entity/blue_parrot.png");
             }
             case 2 -> {
-                return Declarar.getMegaParrotId("textures/entity/cyan_parrot.png");
+                return Declarar.getMegaParrotId("textures/entity/green_parrot.png");
             }
             case 3 -> {
-                return Declarar.getMegaParrotId("textures/entity/green_parrot.png");
+                return Declarar.getMegaParrotId("textures/entity/cyan_parrot.png");
             }
             case 4 -> {
                 return Declarar.getMegaParrotId("textures/entity/grey_parrot.png");

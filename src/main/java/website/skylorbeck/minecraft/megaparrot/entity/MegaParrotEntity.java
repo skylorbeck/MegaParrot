@@ -115,7 +115,7 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
         this.updateSaddle();
     }
 
-    private void setVariant(int variant) {
+    public void setVariant(int variant) {
         this.dataTracker.set(VARIANT, variant);
     }
     public int getVariant() {

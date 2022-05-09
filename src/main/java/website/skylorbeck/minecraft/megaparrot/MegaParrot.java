@@ -10,10 +10,14 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.item.Items;
+import net.minecraft.potion.Potions;
+import net.minecraft.recipe.BrewingRecipeRegistry;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 import software.bernie.geckolib3.GeckoLib;
+import website.skylorbeck.minecraft.megaparrot.mixin.BrewingRecipeRegistryInvoker;
 
 import static website.skylorbeck.minecraft.megaparrot.Declarar.config;
 
@@ -64,6 +68,9 @@ public class MegaParrot implements ModInitializer {
         Registry.register(Registry.ITEM,Declarar.getMegaParrotId("cooked_parrot_meat"),Declarar.COOKED_PARROT_MEAT);
         Registry.register(Registry.ITEM,Declarar.getMegaParrotId("bird_whistle"),Declarar.BIRD_WHISTLE);
         Registry.register(Registry.ITEM,Declarar.getMegaParrotId("mega_feather"),Declarar.MEGA_FEATHER);
+        Registry.register(Registry.STATUS_EFFECT, "megafy",Declarar.MEGAFY);
+        Registry.register(Registry.POTION, "mega_potion",Declarar.MEGA_POTION);
+        BrewingRecipeRegistryInvoker.invokeRegisterPotionRecipe(Potions.STRENGTH, Declarar.MEGA_FEATHER, Declarar.MEGA_POTION);
     }
 }
 //todo
