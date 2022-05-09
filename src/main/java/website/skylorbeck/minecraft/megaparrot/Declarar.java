@@ -27,5 +27,7 @@ public class Declarar {
     public static final Item PARROT_MEAT = new Item(new Item.Settings().group(ItemGroup.FOOD).food(FoodComponents.CHICKEN));
     public static final Item COOKED_PARROT_MEAT = new Item(new Item.Settings().group(ItemGroup.FOOD).food(FoodComponents.COOKED_CHICKEN));
 
-    public static final Item BIRD_WHISTLE = new BirdWhistle(new FabricItemSettings().group(ItemGroup.MISC));
+    public static final Item BIRD_WHISTLE = new BirdWhistle(new FabricItemSettings().group(ItemGroup.MISC).maxCount(1));
+
+    public static final Item MEGA_FEATHER = new Item(new FabricItemSettings().group(ItemGroup.MISC));
 }

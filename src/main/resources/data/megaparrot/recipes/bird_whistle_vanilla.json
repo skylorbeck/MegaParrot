@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#FB",
+    "ROX",
+    "FYF"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:flint"
+    },
+    "F": {
+      "item": "megaparrot:mega_feather"
+    },
+    "B": {
+      "item": "minecraft:bamboo"
+    },
+    "R": {
+      "item": "minecraft:red_dye"
+    },
+    "O": {
+      "tag": "minecraft:planks"
+    },
+    "X": {
+      "item": "minecraft:blue_dye"
+    },
+    "Y": {
+      "item": "minecraft:yellow_dye"
+    }
+  },
+  "result": {
+    "item": "megaparrot:bird_whistle",
+    "count": 1
+  }
+}

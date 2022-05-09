@@ -38,6 +38,35 @@
           "type": "minecraft:item",
           "functions": [
             {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0.0,
+                "max": 2.0
+              },
+              "add": false
+            },
+            {
+              "function": "minecraft:looting_enchant",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0.0,
+                "max": 4.0
+              }
+            }
+          ],
+          "name": "megaparrot:mega_feather"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
               "function": "minecraft:furnace_smelt",
               "conditions": [
                 {

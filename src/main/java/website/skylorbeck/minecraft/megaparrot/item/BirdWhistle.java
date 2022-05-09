@@ -39,15 +39,17 @@ public class BirdWhistle extends Item {
                 user.playSound(SoundEvents.ENTITY_DOLPHIN_PLAY,SoundCategory.PLAYERS,1f,0.5f);
                 Entity bird = ((ServerWorld)world).getEntity(nbtCompound.getUuid("bird"));
                 if (bird!=null) {
-                    bird.setPos(pos.getX(), pos.getY(), pos.getZ());
+                    bird.setPos(pos.getX(), pos.getY()+1, pos.getZ());
                     user.sendMessage(Text.of("Bird summoned"),true);
                 } else {
                     user.sendMessage(Text.of("Your bird was unable to hear you"),true);
                 }
             }
+            user.getItemCooldownManager().set(this,100);
         }
         return super.use(world, user, hand);
     }
+
 
     @Override
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {

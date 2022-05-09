@@ -45,6 +45,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import website.skylorbeck.minecraft.megaparrot.Declarar;
 import website.skylorbeck.minecraft.megaparrot.mixin.HorseBaseEntityAccessor;
 
 import java.util.Arrays;
@@ -67,6 +68,8 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     public float prevMaxWingDeviation;
     public float prevFlapProgress;
     private float flapSpeed = 1.0f;
+
+    private int featherDropTime = this.random.nextInt(6000)+6000;
     public MegaParrotEntity(EntityType<? extends HorseBaseEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -102,6 +105,7 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
         if (!this.items.getStack(1).isEmpty()) {
             nbt.put("ArmorItem", this.items.getStack(1).writeNbt(new NbtCompound()));
         }
+        nbt.putInt("FeatherDropTime", this.featherDropTime);
     }
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
@@ -110,6 +114,9 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
         this.setVariant(nbt.getInt("Variant"));
         if (nbt.contains("ArmorItem", 10) && !(itemStack = ItemStack.fromNbt(nbt.getCompound("ArmorItem"))).isEmpty() && this.isHorseArmor(itemStack)) {
             this.items.setStack(1, itemStack);
+        }
+        if (nbt.contains("FeatherDropTime")) {
+            this.featherDropTime = nbt.getInt("FeatherDropTime");
         }
         this.updateSaddle();
     }
@@ -236,6 +243,12 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
 
         this.flapProgress += this.flapSpeed * 2.0F;
 
+        if (!this.world.isClient && this.isAlive() && !this.isBaby() && --this.featherDropTime <= 0) {
+            for (int i = 0; i < this.random.nextInt(2)+1 ; i++) {
+                this.dropItem(Declarar.MEGA_FEATHER);
+            }
+            this.featherDropTime = this.random.nextInt(6000) + 6000;
+        }
     }
     @Override
     protected boolean hasWings() {
