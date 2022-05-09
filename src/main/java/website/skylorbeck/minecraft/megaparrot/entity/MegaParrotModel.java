@@ -7,8 +7,6 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import website.skylorbeck.minecraft.megaparrot.Declarar;
 
-import java.util.Locale;
-
 public class MegaParrotModel extends AnimatedGeoModel<MegaParrotEntity> {
 
     @Override

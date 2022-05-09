@@ -5,24 +5,20 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypeFilter;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import website.skylorbeck.minecraft.megaparrot.Declarar;
 import website.skylorbeck.minecraft.megaparrot.entity.MegaParrotEntity;
+
+import java.util.UUID;
 
 public class BirdWhistle extends Item {
     public BirdWhistle(Settings settings) {
@@ -39,11 +35,13 @@ public class BirdWhistle extends Item {
                 user.playSound(SoundEvents.ENTITY_DOLPHIN_PLAY,SoundCategory.PLAYERS,1f,0.5f);
                 Entity bird = ((ServerWorld)world).getEntity(nbtCompound.getUuid("bird"));
                 if (bird!=null) {
-                    bird.setPos(pos.getX(), pos.getY()+1, pos.getZ());
+                    bird.teleport(pos.getX(), pos.getY()+1, pos.getZ());
                     user.sendMessage(Text.of("Bird summoned"),true);
                 } else {
                     user.sendMessage(Text.of("Your bird was unable to hear you"),true);
                 }
+            } else {
+                user.sendMessage(Text.of("No bird is attuned to this whistle"),true);
             }
             user.getItemCooldownManager().set(this,100);
         }
@@ -53,11 +51,17 @@ public class BirdWhistle extends Item {
 
     @Override
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
-        if (entity.getType().equals(Declarar.MEGA_PARROT_ENTITY_TYPE)){
-            NbtCompound nbtCompound = stack.getOrCreateNbt();
-            nbtCompound.putUuid("bird",entity.getUuid());
-            stack.writeNbt(nbtCompound);
-            user.sendMessage(Text.of("Bird Registered"),true);
+        if (entity.getType().equals(Declarar.MEGA_PARROT_ENTITY_TYPE)) {
+            MegaParrotEntity mpe = (MegaParrotEntity) entity;
+            UUID uuid = mpe.getOwnerUuid();
+            if (uuid!=null&& uuid.equals(user.getUuid())) {
+                NbtCompound nbtCompound = stack.getOrCreateNbt();
+                nbtCompound.putUuid("bird", entity.getUuid());
+                stack.writeNbt(nbtCompound);
+                user.sendMessage(Text.of("Your Parrot has attuned to this whistle"), true);
+            } else {
+                user.sendMessage(Text.of("This is not your Bird"),true);
+            }
         }
 
         return super.useOnEntity(stack, user, entity, hand);

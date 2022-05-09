@@ -9,13 +9,9 @@ import net.minecraft.item.DyeableHorseArmorItem;
 import net.minecraft.item.HorseArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.GeckoLib;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import website.skylorbeck.minecraft.megaparrot.Declarar;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @SuppressWarnings("rawtypes")
 public class MegaParrotArmorLayer extends GeoLayerRenderer {
