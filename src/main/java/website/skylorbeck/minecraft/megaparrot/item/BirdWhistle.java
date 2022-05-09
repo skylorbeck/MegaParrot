@@ -66,4 +66,10 @@ public class BirdWhistle extends Item {
 
         return super.useOnEntity(stack, user, entity, hand);
     }
+
+    @Override
+    public boolean hasGlint(ItemStack stack) {
+        NbtCompound nbtCompound = stack.getOrCreateNbt();
+        return nbtCompound.contains("bird");
+    }
 }
