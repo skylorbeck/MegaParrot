@@ -10,12 +10,12 @@ import website.skylorbeck.minecraft.megaparrot.Declarar;
 public class MegaParrotModel extends AnimatedGeoModel<MegaParrotEntity> {
 
     @Override
-    public Identifier getModelLocation(MegaParrotEntity object) {
+    public Identifier getModelResource(MegaParrotEntity object) {
         return Declarar.getMegaParrotId("geo/mega_parrot.geo.json");
     }
 
     @Override
-    public Identifier getTextureLocation(MegaParrotEntity object) {
+    public Identifier getTextureResource(MegaParrotEntity object) {
         if (object.getCustomName() != null) {
             String name = object.getName().getString();
             if (name.equalsIgnoreCase("mordecai")){
@@ -66,7 +66,7 @@ public class MegaParrotModel extends AnimatedGeoModel<MegaParrotEntity> {
     }
 
     @Override
-    public Identifier getAnimationFileLocation(MegaParrotEntity animatable) {
+    public Identifier getAnimationResource(MegaParrotEntity animatable) {
         return Declarar.getMegaParrotId("animations/mega_parrot.animation.json");
     }
 

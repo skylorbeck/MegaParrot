@@ -13,9 +13,11 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Potions;
 import net.minecraft.recipe.BrewingRecipeRegistry;
+import net.minecraft.tag.BiomeTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeKeys;
 import software.bernie.geckolib3.GeckoLib;
 import website.skylorbeck.minecraft.megaparrot.mixin.BrewingRecipeRegistryInvoker;
 
@@ -40,27 +42,19 @@ public class MegaParrot implements ModInitializer {
                         .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.325f)
         );
         if (config.spawnStuff.jungle){
-            BiomeModifications.addSpawn(BiomeSelectors.categories(Biome.Category.JUNGLE),SpawnGroup.CREATURE,Declarar.MEGA_PARROT_ENTITY_TYPE,config.spawnStuff.spawnWeightA,config.minGroupSize, config.maxGroupSize);
+            BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.JUNGLE),SpawnGroup.CREATURE,Declarar.MEGA_PARROT_ENTITY_TYPE,config.spawnStuff.spawnWeightA,config.minGroupSize, config.maxGroupSize);
         }
 
         if (config.spawnStuff.taiga){
-            BiomeModifications.addSpawn(BiomeSelectors.categories(Biome.Category.TAIGA),SpawnGroup.CREATURE,Declarar.MEGA_PARROT_ENTITY_TYPE,config.spawnStuff.spawnWeightB,config.minGroupSize, config.maxGroupSize);
+            BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.TAIGA),SpawnGroup.CREATURE,Declarar.MEGA_PARROT_ENTITY_TYPE,config.spawnStuff.spawnWeightB,config.minGroupSize, config.maxGroupSize);
         }
 
         if (config.spawnStuff.desert){
-            BiomeModifications.addSpawn(BiomeSelectors.categories(Biome.Category.DESERT),SpawnGroup.CREATURE,Declarar.MEGA_PARROT_ENTITY_TYPE,config.spawnStuff.spawnWeightC,config.minGroupSize, config.maxGroupSize);
+            BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.DESERT),SpawnGroup.CREATURE,Declarar.MEGA_PARROT_ENTITY_TYPE,config.spawnStuff.spawnWeightC,config.minGroupSize, config.maxGroupSize);
         }
 
         if (config.spawnStuff.plains){
-            BiomeModifications.addSpawn(BiomeSelectors.categories(Biome.Category.PLAINS),SpawnGroup.CREATURE,Declarar.MEGA_PARROT_ENTITY_TYPE,config.spawnStuff.spawnWeightD,config.minGroupSize, config.maxGroupSize);
-        }
-
-        if (config.spawnStuff.mesa){
-            BiomeModifications.addSpawn(BiomeSelectors.categories(Biome.Category.MESA),SpawnGroup.CREATURE,Declarar.MEGA_PARROT_ENTITY_TYPE,config.spawnStuff.spawnWeightE,config.minGroupSize, config.maxGroupSize);
-        }
-
-        if (config.spawnStuff.icy){
-            BiomeModifications.addSpawn(BiomeSelectors.categories(Biome.Category.ICY),SpawnGroup.CREATURE,Declarar.MEGA_PARROT_ENTITY_TYPE,config.spawnStuff.spawnWeightF,config.minGroupSize, config.maxGroupSize);
+            BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.PLAINS),SpawnGroup.CREATURE,Declarar.MEGA_PARROT_ENTITY_TYPE,config.spawnStuff.spawnWeightD,config.minGroupSize, config.maxGroupSize);
         }
 
         Registry.register(Registry.ITEM,Declarar.getMegaParrotId("spawn_egg"),Declarar.MEGA_PARROT_EGG);

@@ -12,7 +12,8 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.passive.HorseBaseEntity;
+import net.minecraft.entity.passive.AbstractHorseEntity;
+import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.passive.ParrotEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.HorseArmorItem;
@@ -29,6 +30,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
@@ -48,7 +50,7 @@ import website.skylorbeck.minecraft.megaparrot.mixin.HorseBaseEntityAccessor;
 import java.util.Arrays;
 import java.util.UUID;
 
-public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
+public class MegaParrotEntity extends AbstractHorseEntity implements IAnimatable {
     private static final Item[] BREEDING_INGREDIENT = {Items.WHEAT_SEEDS,Items.MELON_SEEDS,Items.BEETROOT_SEEDS,Items.PUMPKIN_SEEDS, Items.APPLE, Items.CARROT,Items.BEETROOT,Items.POTATO, Items.GOLDEN_CARROT, Items.GOLDEN_APPLE, Items.ENCHANTED_GOLDEN_APPLE};
     private final AnimationFactory factory = new AnimationFactory(this);
     private static final TrackedData<Integer> VARIANT = DataTracker.registerData(MegaParrotEntity.class, TrackedDataHandlerRegistry.INTEGER);
@@ -64,12 +66,12 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
     private float flapSpeed = 1.0f;
 
     private int featherDropTime = this.random.nextInt(6000)+6000;
-    public MegaParrotEntity(EntityType<? extends HorseBaseEntity> entityType, World world) {
+    public MegaParrotEntity(EntityType<? extends AbstractHorseEntity> entityType, World world) {
         super(entityType, world);
     }
 
     @Override
-    protected void initAttributes() {
+    protected void initAttributes(Random random) {
         this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(this.getChildHealthBonus());
         this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(this.getChildMovementSpeedBonus());
         this.getAttributeInstance(EntityAttributes.HORSE_JUMP_STRENGTH).setBaseValue(this.getChildJumpStrengthBonus());
@@ -297,7 +299,7 @@ public class MegaParrotEntity extends HorseBaseEntity implements IAnimatable {
         }
         if (bl) {
             this.playEatingAnimation();
-            this.emitGameEvent(GameEvent.EAT, this.getCameraBlockPos());
+            this.emitGameEvent(GameEvent.EAT, this);
         }
         return bl;
     }

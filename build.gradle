@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '0.10-SNAPSHOT'
+    id 'fabric-loom' version '0.12-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -7,32 +7,34 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
-    // Add repositories to retrieve artifacts from in here.
-    // You should only use this when depending on other mods because
-    // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-    // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-    // for more information about repositories.
-    maven { url "https://maven.terraformersmc.com/releases/" }
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
+    maven {
+        name = 'Ladysnake Mods'
+        url = 'https://ladysnake.jfrog.io/artifactory/mods'
+    }
     maven { url "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/" }
+    maven { url 'https://maven.blamejared.com' }
+    maven { url "https://maven.bai.lol" }
     maven { url "https://maven.shedaniel.me/" }
+    maven { url "https://maven.theillusivec4.top"}
+    maven { url 'https://maven.blamejared.com' }
     mavenLocal()
 }
 
 dependencies {
-    // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-    // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation "software.bernie.geckolib:geckolib-fabric-1.18:${project.geckolib_version}"
-    modApi("com.terraformersmc:modmenu:${project.mod_menu_version}") {
-        exclude(group: "net.fabricmc.fabric-api")
-    }
-    modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
-        exclude(group: "net.fabricmc.fabric-api")
-    }
+    modImplementation "website.skylorbeck.minecraft:SkylorLib:${project.skylib_version}"
+    modImplementation "software.bernie.geckolib:geckolib-fabric-1.19:${project.geckolib_version}"
+    modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_version}") {exclude(group: "net.fabricmc.fabric-api")}
+    modRuntimeOnly "com.terraformersmc:modmenu:${project.mod_menu_version}"
+//    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
+//    modRuntimeOnly "mcp.mobius.waila:wthit:fabric-${wthit_version}"
 }
 
 processResources {

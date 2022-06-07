@@ -31,13 +31,5 @@ public class ParrotConfig implements ConfigData {
         public boolean plains = true;
         @ConfigEntry.BoundedDiscrete(min = 1, max = 20)
         public int spawnWeightD = 6;
-
-        public boolean mesa = true;
-        @ConfigEntry.BoundedDiscrete(min = 1, max = 20)
-        public int spawnWeightE = 6;
-
-        public boolean icy = true;
-        @ConfigEntry.BoundedDiscrete(min = 1, max = 20)
-        public int spawnWeightF = 4;
     }
 }
