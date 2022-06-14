@@ -3,21 +3,14 @@ package website.skylorbeck.minecraft.megaparrot;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.FoodComponents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.SpawnEggItem;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.Potions;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import website.skylorbeck.minecraft.megaparrot.entity.MegaParrotEntity;
 import website.skylorbeck.minecraft.megaparrot.item.BirdWhistle;
-import website.skylorbeck.minecraft.megaparrot.statuseffects.MegaEffect;
 
 public class Declarar {
     public static String MODID = "megaparrot";
@@ -38,9 +31,4 @@ public class Declarar {
     public static final Item COOKED_PARROT_MEAT = new Item(new Item.Settings().group(ItemGroup.FOOD).food(FoodComponents.COOKED_CHICKEN));
     public static final Item BIRD_WHISTLE = new BirdWhistle(new FabricItemSettings().group(ItemGroup.MISC).maxCount(1));
     public static final Item MEGA_FEATHER = new Item(new FabricItemSettings().group(ItemGroup.MISC));
-
-    public static final StatusEffect MEGAFY = new MegaEffect();
-
-    public static final Potion MEGA_POTION = new Potion("mega_potion", new StatusEffectInstance(MEGAFY, 200));
-
 }

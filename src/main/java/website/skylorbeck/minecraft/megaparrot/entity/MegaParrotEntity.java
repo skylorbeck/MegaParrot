@@ -13,7 +13,6 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.AbstractHorseEntity;
-import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.passive.ParrotEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.HorseArmorItem;
@@ -46,6 +45,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import website.skylorbeck.minecraft.megaparrot.Declarar;
 import website.skylorbeck.minecraft.megaparrot.mixin.HorseBaseEntityAccessor;
+import website.skylorbeck.minecraft.skylorlib.IMegable;
 
 import java.util.Arrays;
 import java.util.UUID;
