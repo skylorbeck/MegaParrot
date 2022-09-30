@@ -160,7 +160,7 @@ public class MegaParrotEntity extends AbstractHorseEntity implements IAnimatable
                 this.openInventory(player);
                 return ActionResult.success(this.world.isClient);
             }
-        } else
+        }
         this.putPlayerOnBack(player);
         return ActionResult.success(this.world.isClient);
     }
